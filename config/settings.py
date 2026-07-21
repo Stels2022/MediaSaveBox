@@ -13,5 +13,6 @@ load_dotenv(BASE_DIR / ".env")
 DOWNLOAD_DIR = BASE_DIR / "downloads"
 TEMP_DIR = BASE_DIR / "temp"
 LOG_DIR = BASE_DIR / "logs"
+KEYBOARDS_DIR = BASE_DIR / "keyboards"
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")

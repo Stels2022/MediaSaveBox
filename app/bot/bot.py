@@ -4,15 +4,14 @@ from app.handlers.start_handler import start_command
 
 from telegram.ext import MessageHandler, filters
 from app.handlers.message_handler import message_handler
+from telegram.ext import CallbackQueryHandler
+from app.handlers.callback_handler import callback_handler
 
 from config.settings import BOT_TOKEN
 import logging
 
 
 class TelegramBot:
-    """
-    Управляет Telegram-ботом.
-    """
 
     def __init__(self):
         self.application = (
@@ -20,9 +19,15 @@ class TelegramBot:
             .token(BOT_TOKEN)
             .build()
         )
+
+        self.register_handlers()
+
+    def register_handlers(self):
+
         self.application.add_handler(
             CommandHandler("start", start_command)
         )
+
         self.application.add_handler(
             MessageHandler(
                 filters.TEXT & ~filters.COMMAND,
@@ -30,7 +35,10 @@ class TelegramBot:
             )
         )
 
+        self.application.add_handler(
+            CallbackQueryHandler(callback_handler)
+        )
+
     def run(self):
         logging.info("Starting Telegram Bot...")
-
         self.application.run_polling()
