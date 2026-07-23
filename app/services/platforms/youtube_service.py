@@ -20,6 +20,8 @@ class YouTubeService:
         self.ydl_opts = {
             "quiet": True,
             "no_warnings": True,
+            "noplaylist": True,
+            "socket_timeout": 10,
         }
 
     @staticmethod
@@ -35,15 +37,28 @@ class YouTubeService:
 
     def _extract_info(self, url: str):
 
+        logging.info("Create YoutubeDL")
+
         try:
             with yt_dlp.YoutubeDL(self.ydl_opts) as ydl:
-                return ydl.extract_info(
+
+                logging.info("Calling extract_info")
+
+                result = ydl.extract_info(
                     url,
                     download=False
                 )
 
+                logging.info("extract_info finished")
+
+                return result
+
         except DownloadError as e:
-            logging.error(e)
+            logging.exception(e)
+            return None
+
+        except Exception:
+            logging.exception("Unexpected error")
             return None
 
     def _detect_media_type(self, info: dict) -> MediaType:

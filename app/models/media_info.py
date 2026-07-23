@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from pathlib import Path
 
 from app.models.platform import Platform
 from app.models.media_type import MediaType
@@ -22,3 +23,5 @@ class MediaInfo:
     thumbnail: str
 
     platform: Platform
+
+    files: list[Path] = field(default_factory=list)

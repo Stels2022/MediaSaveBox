@@ -17,6 +17,8 @@ logs/*.log
 # Downloads
 downloads/
 
+cookies/
+
 # Windows
 Thumbs.db
 Desktop.ini
