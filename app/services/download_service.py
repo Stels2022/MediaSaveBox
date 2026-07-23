@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from pathlib import Path
 
 import yt_dlp
@@ -11,7 +12,12 @@ class DownloadService:
         self.temp_dir.mkdir(exist_ok=True)
 
     async def download_video(self, url: str) -> Path:
+        return await asyncio.to_thread(
+            self._download_video,
+            url
+        )
 
+    def _download_video(self, url: str) -> Path:
         logging.info("Downloading video...")
 
         output = self.temp_dir / "%(id)s.%(ext)s"
@@ -26,7 +32,6 @@ class DownloadService:
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-
             info = ydl.extract_info(
                 url,
                 download=True
@@ -42,6 +47,12 @@ class DownloadService:
             return filename
 
     async def download_audio(self, url: str) -> Path:
+        return await asyncio.to_thread(
+            self._download_audio,
+            url
+        )
+
+    def _download_audio(self, url: str) -> Path:
 
         logging.info("Downloading audio...")
 

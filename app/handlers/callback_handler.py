@@ -5,8 +5,10 @@ from telegram.ext import ContextTypes
 
 from app.services.media_cache import MediaCache
 from app.services.download_service import DownloadService
+from app.services.chat_action_service import ChatActionService
 
 download_service = DownloadService()
+chat_action = ChatActionService()
 
 
 async def callback_handler(update: Update,
@@ -31,13 +33,13 @@ async def callback_handler(update: Update,
         return
 
     if query.data == "download_video":
-
+        await chat_action.typing(query.message.chat)
         file = await download_service.download_video(
             media.url
         )
 
         try:
-
+            await chat_action.upload_video(query.message.chat)
             with open(file, "rb") as video:
 
                 await query.message.reply_video(
@@ -52,13 +54,17 @@ async def callback_handler(update: Update,
 
 
     elif query.data == "download_audio":
-
+        await chat_action.typing(
+            query.message.chat
+        )
         file = await download_service.download_audio(
             media.url
         )
 
         try:
-
+            await chat_action.upload_audio(
+                query.message.chat
+            )
             with open(file, "rb") as audio:
 
                 await query.message.reply_audio(
@@ -71,3 +77,15 @@ async def callback_handler(update: Update,
 
             if file.exists():
                 file.unlink()
+
+    elif query.data == "download_image":
+
+        await query.message.reply_text(
+            "🖼 Скачивание изображения пока в разработке."
+        )
+
+    elif query.data == "download_gallery":
+
+        await query.message.reply_text(
+            "📷 Скачивание галереи пока в разработке."
+        )

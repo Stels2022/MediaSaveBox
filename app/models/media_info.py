@@ -1,19 +1,24 @@
 from dataclasses import dataclass
 
 from app.models.platform import Platform
+from app.models.media_type import MediaType
 
 
 @dataclass
 class MediaInfo:
-    """
-    Информация о медиафайле.
-    """
 
     title: str
     author: str
+
+    media_type: MediaType
+
     duration: int
-    url: str
-    thumbnail: str
-    platform: Platform
-    views: int
     duration_string: str
+
+    views: int
+
+    url: str
+
+    thumbnail: str
+
+    platform: Platform

@@ -17,6 +17,10 @@ class TelegramBot:
         self.application = (
             ApplicationBuilder()
             .token(BOT_TOKEN)
+            .read_timeout(120)
+            .write_timeout(120)
+            .connect_timeout(30)
+            .pool_timeout(30)
             .build()
         )
 
